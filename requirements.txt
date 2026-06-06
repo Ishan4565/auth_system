@@ -9,3 +9,5 @@ httpx
 google-auth
 pydantic[email]
 bcrypt==4.0.1
+requests
+google-auth-httplib2
