@@ -10,8 +10,8 @@ from database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
 
-GOOGLE_CLIENT_ID = "112345092693-pupt6aflejpc70esti0en7gcrg2cmp0h.apps.googleusercontent.com"
-
+import os
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "112345092693-pupt6aflejpc70esti0en7gcrg2cmp0h.apps.googleusercontent.com")
 app = FastAPI(title="Full Auth System")
 
 app.add_middleware(
