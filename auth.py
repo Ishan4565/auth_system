@@ -1,8 +1,9 @@
+import os
+SECRET_KEY = os.getenv("SECRET_KEY", "your-super-secret-key")
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from fastapi import HTTPException
-
 SECRET_KEY = "your-super-secret-key-change-this"
 ALGORITHM  = "HS256"
 TOKEN_EXPIRE_HOURS = 24
