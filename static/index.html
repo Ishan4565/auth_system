@@ -3,54 +3,36 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Auth System</title>
+  <title>Login</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #0a0a0f;
-      --surface: #13131a;
-      --border: #2a2a3a;
-      --accent: #7c6af7;
-      --text: #e8e8f0;
-      --muted: #6b6b82;
-      --success: #4ade80;
-      --error: #f87171;
+      --bg: #0a0a0f; --surface: #13131a; --border: #2a2a3a;
+      --accent: #7c6af7; --text: #e8e8f0; --muted: #6b6b82;
+      --success: #4ade80; --error: #f87171;
     }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
+      background: var(--bg); color: var(--text);
+      font-family: 'Segoe UI', sans-serif; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 2rem;
     }
-
     .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 1rem; }
-
-    h1 { text-align: center; font-size: 1.8rem; margin-bottom: 0.5rem;
-         background: linear-gradient(135deg, var(--text), var(--accent));
-         -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    p.sub { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem; }
-
+    h1 {
+      text-align: center; font-size: 2rem; margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
-
-    .tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .tabs { display: flex; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
     .tab {
       flex: 1; padding: 0.6rem; text-align: center; cursor: pointer;
       font-size: 0.85rem; color: var(--muted); border-bottom: 2px solid transparent;
       transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
     }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
     .form { display: none; flex-direction: column; gap: 0.8rem; }
     .form.active { display: flex; }
-
     input {
       width: 100%; padding: 0.75rem 1rem;
       background: #0d0d14; border: 1px solid var(--border);
@@ -58,63 +40,47 @@
       outline: none; transition: border-color 0.2s;
     }
     input:focus { border-color: var(--accent); }
-
     .btn {
-      width: 100%; padding: 0.8rem;
-      background: var(--accent); color: #fff;
-      border: none; border-radius: 8px;
-      font-size: 0.9rem; font-weight: 600;
+      width: 100%; padding: 0.8rem; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600;
       cursor: pointer; transition: all 0.2s;
     }
     .btn:hover { background: #9180f9; transform: translateY(-1px); }
-
     .divider {
       display: flex; align-items: center; gap: 1rem;
       color: var(--muted); font-size: 0.75rem; margin: 0.5rem 0;
     }
     .divider::before, .divider::after { content: ''; flex: 1; border-top: 1px solid var(--border); }
-
     #googleBtn { display: flex; justify-content: center; }
-
     .status {
-      display: none; padding: 0.8rem 1rem;
-      border-radius: 8px; font-size: 0.82rem;
-      font-family: monospace; border: 1px solid; margin-top: 0.5rem;
+      display: none; padding: 0.8rem 1rem; border-radius: 8px;
+      font-size: 0.82rem; font-family: monospace; border: 1px solid; margin-top: 0.5rem;
     }
     .status.success { background: rgba(74,222,128,0.07); border-color: var(--success); color: var(--success); }
     .status.error   { background: rgba(248,113,113,0.07); border-color: var(--error);   color: var(--error); }
-
-    /* logged in view */
     #loggedIn { display: none; text-align: center; }
     #loggedIn img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent); margin-bottom: 1rem; }
     #loggedIn .name { font-size: 1.2rem; font-weight: 600; }
     #loggedIn .email { color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem; }
     #loggedIn .token-box {
-      background: #0d0d14; border: 1px solid var(--border);
-      border-radius: 8px; padding: 0.8rem; font-family: monospace;
-      font-size: 0.7rem; color: var(--muted); word-break: break-all;
-      text-align: left; margin-bottom: 1rem;
+      background: #0d0d14; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.8rem; font-family: monospace; font-size: 0.7rem;
+      color: var(--muted); word-break: break-all; text-align: left; margin-bottom: 1rem;
     }
     .btn-outline {
-      background: transparent; color: var(--error);
-      border: 1px solid var(--error); border-radius: 8px;
-      padding: 0.6rem; font-size: 0.85rem; cursor: pointer; width: 100%;
+      background: transparent; color: var(--error); border: 1px solid var(--error);
+      border-radius: 8px; padding: 0.6rem; font-size: 0.85rem; cursor: pointer; width: 100%;
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>Auth System</h1>
-  <p class="sub">Full login system with FastAPI + PostgreSQL</p>
-
-  <!-- Auth Card -->
+  <h1>Login</h1>
   <div class="card" id="authCard">
     <div class="tabs">
       <button class="tab active" onclick="switchTab('login')">Login</button>
       <button class="tab"        onclick="switchTab('register')">Register</button>
     </div>
-
-    <!-- Login Form -->
     <div class="form active" id="loginForm">
       <input type="email"    id="loginEmail"    placeholder="Email"/>
       <input type="password" id="loginPassword" placeholder="Password"/>
@@ -123,8 +89,6 @@
       <div id="googleBtn"></div>
       <div class="status" id="loginStatus"></div>
     </div>
-
-    <!-- Register Form -->
     <div class="form" id="registerForm">
       <input type="text"     id="regName"     placeholder="Full Name"/>
       <input type="email"    id="regEmail"    placeholder="Email"/>
@@ -133,8 +97,6 @@
       <div class="status" id="registerStatus"></div>
     </div>
   </div>
-
-  <!-- Logged In Card -->
   <div class="card" id="loggedIn">
     <img id="userPic" src="https://ui-avatars.com/api/?name=User&background=7c6af7&color=fff"/>
     <div class="name"  id="userName"></div>
@@ -144,24 +106,16 @@
     <button class="btn-outline" onclick="logout()">Logout</button>
   </div>
 </div>
-
 <script>
-  const BACKEND = "http://localhost:8000";
+  const BACKEND = "https://auth-system-a6s3.onrender.com";
   const GOOGLE_CLIENT_ID = "112345092693-pupt6aflejpc70esti0en7gcrg2cmp0h.apps.googleusercontent.com";
 
-  // ── Init Google Sign-In ──
   window.onload = () => {
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: googleLogin
-    });
-    google.accounts.id.renderButton(
-      document.getElementById("googleBtn"),
-      { theme: "filled_black", size: "large", width: 360 }
-    );
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: googleLogin });
+    google.accounts.id.renderButton(document.getElementById("googleBtn"),
+      { theme: "filled_black", size: "large", width: 360 });
   };
 
-  // ── Tab switching ──
   function switchTab(tab) {
     document.querySelectorAll(".tab").forEach((t, i) => {
       t.classList.toggle("active", (i === 0) === (tab === "login"));
@@ -170,94 +124,67 @@
     document.getElementById("registerForm").classList.toggle("active", tab === "register");
   }
 
-  // ── Show status ──
   function showStatus(id, msg, type) {
     const el = document.getElementById(id);
-    el.textContent = msg;
-    el.className = `status ${type}`;
-    el.style.display = "block";
+    el.textContent = msg; el.className = `status ${type}`; el.style.display = "block";
   }
 
-  // ── Show logged in view ──
   function showUser(user, token) {
     document.getElementById("authCard").style.display = "none";
     document.getElementById("loggedIn").style.display = "block";
     document.getElementById("userName").textContent  = user.name;
     document.getElementById("userEmail").textContent = user.email;
     document.getElementById("tokenBox").textContent  = token;
-    if (user.picture) document.getElementById("userPic").src = user.picture;
-    else document.getElementById("userPic").src =
+    document.getElementById("userPic").src = user.picture ||
       `https://ui-avatars.com/api/?name=${user.name}&background=7c6af7&color=fff`;
   }
 
-  // ── Logout ──
   function logout() {
     document.getElementById("authCard").style.display = "block";
     document.getElementById("loggedIn").style.display = "none";
   }
 
-  // ── Register ──
   async function register() {
-    const name     = document.getElementById("regName").value;
-    const email    = document.getElementById("regEmail").value;
+    const name = document.getElementById("regName").value;
+    const email = document.getElementById("regEmail").value;
     const password = document.getElementById("regPassword").value;
-
-    if (!name || !email || !password) {
+    if (!name || !email || !password)
       return showStatus("registerStatus", "Please fill all fields", "error");
-    }
-
     const resp = await fetch(`${BACKEND}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password })
     });
-
     const data = await resp.json();
     if (resp.ok) {
-      showStatus("registerStatus", `✅ Account created! Now login.`, "success");
+      showStatus("registerStatus", "✅ Account created! Now login.", "success");
       setTimeout(() => switchTab("login"), 1500);
     } else {
       showStatus("registerStatus", `❌ ${data.detail}`, "error");
     }
   }
 
-  // ── Email Login ──
   async function emailLogin() {
-    const email    = document.getElementById("loginEmail").value;
+    const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
-
-    if (!email || !password) {
+    if (!email || !password)
       return showStatus("loginStatus", "Please fill all fields", "error");
-    }
-
     const resp = await fetch(`${BACKEND}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
-
     const data = await resp.json();
-    if (resp.ok) {
-      showUser(data.user, data.access_token);
-    } else {
-      showStatus("loginStatus", `❌ ${data.detail}`, "error");
-    }
+    if (resp.ok) showUser(data.user, data.access_token);
+    else showStatus("loginStatus", `❌ ${data.detail}`, "error");
   }
 
-  // ── Google Login ──
   async function googleLogin(googleUser) {
     const resp = await fetch(`${BACKEND}/auth/google`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token: googleUser.credential })
     });
-
     const data = await resp.json();
-    if (resp.ok) {
-      showUser(data.user, data.access_token);
-    } else {
-      showStatus("loginStatus", `❌ ${data.detail}`, "error");
-    }
+    if (resp.ok) showUser(data.user, data.access_token);
+    else showStatus("loginStatus", `❌ ${data.detail}`, "error");
   }
 </script>
 </body>
